@@ -1,30 +1,32 @@
 import java.util.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 class User {
     protected String name;
-    protected int birthYear;
+    protected Date dateOfBirth;
     protected String userId;
 
-    public void setDetails() {
+    public void setDetails() throws ParseException{
         Scanner input = new Scanner(System.in);
+
         System.out.print("Enter Name : ");
         String name = input.nextLine();
 
-        System.out.print("Enter Birth-Year : ");
-        int birthYear = input.nextInt();
-        input.nextLine();
-
-        System.out.print("Enter User-Id : ");
-        String userId = input.nextLine();
+        System.out.print("Enter DateOfBirth (dd/MM/yyyy) : ");
+        String date = input.nextLine();
+        SimpleDateFormat formatter1 = new SimpleDateFormat("dd/MM/yyyy");
+        Date dateOfBirth = formatter1.parse(date);
+        
         this.name = name;
-        this.birthYear = birthYear;
-        this.userId = userId;
+        this.dateOfBirth = dateOfBirth;
+
     }
 
-    public void showDetails(int birthYear) {
-        if (this.birthYear == birthYear) {
+    public void showDetails(int birthYear) throws ParseException{
+        if (this.dateOfBirth.getYear()+1900 == birthYear) {
             System.out.println("\tName : " + name);
-            System.out.println("\tBirth-Year : " + birthYear);
+            System.out.println("\tBirth-Year : " + dateOfBirth);
             System.out.println("\tUser-Id : " + userId);
         }
     }
@@ -38,61 +40,146 @@ class Student extends User {
     Student() {
 
     }
+    public Boolean checkrollno(int rollno){
+        if(this.rollno==rollno){
+            return true;
+        }
+        return false;
+    }
 
-    Student(String name, int birthYear, String userId, int rollno, int semester, float cpi) {
+    public Boolean checkuserId(String userId){
+        if(this.userId.equals(userId)){
+            return true;
+        }
+        return false;
+    }
+
+    public int getrollno(){
+        return this.rollno;
+    }
+
+    Student(String name, Date dateOfBirth, String userId, int rollno, int semester, float cpi) {
         this.name = name;
-        this.birthYear = birthYear;
+        this.dateOfBirth = dateOfBirth;
         this.userId = userId;
         this.rollno = rollno;
         this.semester = semester;
         this.cpi = cpi;
     }
 
-    public void setDetails() {
+    public String getuserId() {
+        return this.userId;
+    }
+
+    public void setDetails(Student arr[]) throws ParseException{
+        
         Scanner input = new Scanner(System.in);
         super.setDetails();
 
+        Boolean flag=false,flag2=false;
+ 
+        System.out.print("Enter User-Id : ");
+        String userId=input.nextLine();
+        
+        while(true){
+
+            for (int i = 0; i < arr.length; i++) {
+             if (arr[i]==null) {
+                    break;
+             }
+             if(arr[i].getuserId()!=null){
+                if ( arr[i].getuserId().equals(userId)) {
+                   System.out.println("User-Id already exist!");
+                  flag2=true;  
+                }
+             }
+            }
+
+            if (flag2==false) {
+                this.userId=userId;
+                break;
+            }
+
+            System.out.print("Enter User-Id : ");
+            userId=input.nextLine();
+            flag2=false;
+        }
+        
+            System.out.print("Enter Roll-No : ");
+            int rollno = input.nextInt();
+            input.nextLine();
+        
+        while(true){
+
+            for (int i = 0; i < arr.length; i++) {
+             if (arr[i]==null) {
+                    continue;
+             }
+
+             if (arr[i].getrollno()==rollno) {
+                System.out.println("Rollno already exist!");
+                flag=true;  
+             }
+        }
+
+        if (flag==false) {
+             this.rollno=rollno;
+             break;
+        }
+
         System.out.print("Enter Roll-No : ");
-        int rollno = input.nextInt();
-        input.nextLine();
+            rollno = input.nextInt();
+            input.nextLine();
+            flag=false;
+    }   
+           
+            System.out.print("Enter Semester : ");
+             int semester = input.nextInt();
+            input.nextLine();
 
-        System.out.print("Enter Semester : ");
-        int semester = input.nextInt();
-        input.nextLine();
+            System.out.print("Enter CPI : ");
+            float cpi = input.nextFloat();
+            input.nextLine();
 
-        System.out.print("Enter CPI : ");
-        float cpi = input.nextFloat();
-        input.nextLine();
-
-        this.rollno = rollno;
-        this.semester = semester;
-        this.cpi = cpi;
+            this.semester = semester;
+            this.cpi = cpi;
+        
+        
     }
 
-    public void showDetails(int birthYear) {
-        if (this.birthYear == birthYear) {
+    public void showDetails(int birthYear) throws ParseException{
+        if (this.dateOfBirth.getYear()+1900== birthYear) {
             System.out.println("--------------------------------------------------------------");
-            super.showDetails(birthYear);
-            System.out.println("\tRoll-No : " + rollno);
-            System.out.println("\tSemester : " + semester);
-            System.out.println("\tCPI : " + cpi);
-            System.out.println("--------------------------------------------------------------");
-
-        }
-
-    }
-
-    public void displayDetails(String userId, int rollno, int birthYear) {
-        if (this.userId.equals(userId) && this.rollno == rollno && this.birthYear == birthYear) {
-            System.out.println("--------------------------------------------------------------");
-            super.showDetails(birthYear);
+            super.showDetails((this.dateOfBirth.getYear()+1900));
             System.out.println("\tRoll-No : " + rollno);
             System.out.println("\tSemester : " + semester);
             System.out.println("\tCPI : " + cpi);
             System.out.println("--------------------------------------------------------------");
         }
+
     }
 
+    public void detailsforuserId(String userId) throws ParseException{
+        if (this.userId.equals(userId)) {
+            System.out.println("--------------------------------------------------------------");
+            super.showDetails((this.dateOfBirth.getYear()+1900));
+            System.out.println("\tRoll-No : " + rollno);
+            System.out.println("\tSemester : " + semester);
+            System.out.println("\tCPI : " + cpi);
+            System.out.println("--------------------------------------------------------------");
+        }
+    }
+
+     public void detailsforRollno(int rollno) throws ParseException{
+        if (this.rollno==rollno) {
+            System.out.println("--------------------------------------------------------------");
+            super.showDetails((this.dateOfBirth.getYear()+1900));
+            System.out.println("\tRoll-No : " + rollno);
+            System.out.println("\tSemester : " + semester);
+            System.out.println("\tCPI : " + cpi);
+            System.out.println("--------------------------------------------------------------");
+        }
+    }
 }
 
 class Faculty extends User {
@@ -104,34 +191,91 @@ class Faculty extends User {
 
     }
 
-    Faculty(String name, int birthYear, String userId, String employeeId, String departmentName, int noOfPublications) {
+    Faculty(String name, Date dateOfBirth, String userId, String employeeId, String departmentName, int noOfPublications) {
         this.name = name;
-        this.birthYear = birthYear;
+        this.dateOfBirth = dateOfBirth;
         this.userId = userId;
         this.employeeId = employeeId;
         this.departmentName = departmentName;
         this.noOfPublications = noOfPublications;
     }
 
-    public Boolean checkUserId(String userId) {
-        if (this.userId == userId) {
-            return false;
+    public String getemployeeId() {
+        return this.employeeId;
+    }
+    public Boolean checkemployeeId(String employeeId){
+        if(this.employeeId.equals(employeeId)){
+            return true;
         }
-        return true;
+        return false;
     }
 
-    public Boolean checkEmployeeId(String employeeId) {
-        if (this.employeeId == employeeId) {
-            return false;
+    public Boolean checkuserId(String userId){
+        if(this.userId.equals(userId)){
+            return true;
         }
-        return true;
+        return false;
     }
 
-    public void setDetails() {
+    public void setDetails(Faculty arr[]) throws ParseException{
         Scanner input = new Scanner(System.in);
         super.setDetails();
+        Boolean flag=false,flag2=false;
+
+ 
+        System.out.print("Enter User-Id : ");
+        String userId=input.nextLine();
+        
+        while(true){
+
+            for (int i = 0; i < arr.length; i++) {
+             if (arr[i]==null) {
+                    break;
+             }
+             if(arr[i].getuserId()!=null){
+                if ( arr[i].getuserId().equals(userId)) {
+                   System.out.println("User-Id already exist!");
+                  flag2=true;  
+                }
+             }
+            }
+
+            if (flag2==false) {
+                this.userId=userId;
+                break;
+            }
+
+            System.out.print("Enter User-Id : ");
+            userId=input.nextLine();
+            flag2=false;
+        }
+        
         System.out.print("Enter Employee-Id : ");
         String employeeId = input.nextLine();
+        
+        while(true){
+
+            for (int i = 0; i < arr.length; i++) {
+             if (arr[i]==null) {
+                    break;
+             }
+             if(arr[i].getemployeeId()!=null){
+                if (arr[i].getemployeeId().equals(employeeId)) {
+                   System.out.println("Employee-Id already exist!");
+                  flag=true;  
+                }
+             }
+            }
+
+            if (flag==false) {
+                this.userId=userId;
+                break;
+            }
+
+            System.out.print("Enter Employee-Id : ");
+            employeeId = input.nextLine();
+            flag=false;
+        }
 
         System.out.print("Enter DepartmentName : ");
         String departmentName = input.nextLine();
@@ -146,10 +290,10 @@ class Faculty extends User {
 
     }
 
-    public void showDetails(int birthYear) {
-        if (this.birthYear == birthYear) {
+    public void showDetails(int birthYear) throws ParseException{
+        if (this.dateOfBirth.getYear()+1900 == birthYear) {
             System.out.println("--------------------------------------------------------------");
-            super.showDetails(birthYear);
+            super.showDetails((this.dateOfBirth.getYear()+1900));
             System.out.println("\tEmployee-ID : " + employeeId);
             System.out.println("\tDepartmentName : " + departmentName);
             System.out.println("\tNoOfPublications  : " + noOfPublications);
@@ -159,10 +303,21 @@ class Faculty extends User {
 
     }
 
-    public void displayDetails(String userId, String employeeId, int birthYear) {
-        if (this.userId.equals(userId) && this.employeeId.equals(employeeId) && this.birthYear == birthYear) {
+    public void detailsforuserId(String userId) throws ParseException{
+        if (this.userId.equals(userId)) {
             System.out.println("--------------------------------------------------------------");
-            super.showDetails(birthYear);
+            super.showDetails((this.dateOfBirth.getYear()+1900));
+            System.out.println("\tEmployeeID : " + employeeId);
+            System.out.println("\tDepartmentName : " + departmentName);
+            System.out.println("\tNoOfPublications  : " + noOfPublications);
+            System.out.println("--------------------------------------------------------------");
+        }
+    }
+
+    public void detailsforemployeeId(String employeeId) throws ParseException{
+        if (this.userId.equals(employeeId)) {
+            System.out.println("--------------------------------------------------------------");
+            super.showDetails((this.dateOfBirth.getYear()+1900));
             System.out.println("\tEmployeeID : " + employeeId);
             System.out.println("\tDepartmentName : " + departmentName);
             System.out.println("\tNoOfPublications  : " + noOfPublications);
@@ -181,7 +336,6 @@ class Faculty extends User {
             System.out.println("Different department!");
         }
     }
-
 }
 
 class Staff extends User {
@@ -193,21 +347,93 @@ class Staff extends User {
 
     }
 
-    Staff(String name, int birthYear, String userId, String employeeId, String sectionName, String designation) {
+    Staff(String name, Date dateOfBirth, String userId, String employeeId, String sectionName, String designation) {
         this.name = name;
         this.userId = userId;
-        this.birthYear = birthYear;
+        this.dateOfBirth = dateOfBirth;
         this.employeeId = employeeId;
         this.sectionName = sectionName;
         this.designation = designation;
     }
+    public String getuserId() {
+        return this.userId;
+    }
+    public String getemployeeId() {
+        return this.employeeId;
+    }
 
-    public void setDetails() {
+    public Boolean checkemployeeId(String employeeId){
+        if(this.employeeId.equals(employeeId)){
+            return true;
+        }
+        return false;
+    }
+
+    public Boolean checkuserId(String userId){
+        if(this.userId.equals(userId)){
+            return true;
+        }
+        return false;
+    }
+    public void setDetails(Staff arr[]) throws ParseException{
         Scanner input = new Scanner(System.in);
         super.setDetails();
 
-        System.out.print("Enter EmployeeId : ");
+        Boolean flag=false,flag2=false;
+ 
+        System.out.print("Enter User-Id : ");
+        String userId=input.nextLine();
+        
+        while(true){
+
+            for (int i = 0; i < arr.length; i++) {
+             if (arr[i]==null) {
+                    break;
+             }
+             if(arr[i].getuserId()!=null){
+                if ( arr[i].getuserId().equals(userId)) {
+                   System.out.println("User-Id already exist!");
+                  flag2=true;  
+                }
+             }
+            }
+
+            if (flag2==false) {
+                this.userId=userId;
+                break;
+            }
+
+            System.out.print("Enter User-Id : ");
+            userId=input.nextLine();
+            flag2=false;
+        }
+
+        System.out.print("Enter Employee-Id : ");
         String employeeId = input.nextLine();
+        
+        while(true){
+
+            for (int i = 0; i < arr.length; i++) {
+             if (arr[i]==null) {
+                    break;
+             }
+             if(arr[i].getemployeeId()!=null){
+                if (arr[i].getemployeeId().equals(employeeId)) {
+                   System.out.println("Employee-Id already exist!");
+                  flag=true;  
+                }
+             }
+            }
+
+            if (flag==false) {
+                this.userId=userId;
+                break;
+            }
+
+            System.out.print("Enter Employee-Id : ");
+            employeeId = input.nextLine();
+            flag=false;
+        }
 
         System.out.print("Enter SectionName : ");
         String sectionName = input.nextLine();
@@ -220,10 +446,10 @@ class Staff extends User {
         this.designation = designation;
     }
 
-    public void showDetails(int birthYear) {
-        if (this.birthYear == birthYear) {
+    public void showDetails(int birthYear) throws ParseException{
+        if (this.dateOfBirth.getYear()+1900== birthYear) {
             System.out.println("--------------------------------------------------------------");
-            super.showDetails(birthYear);
+            super.showDetails((this.dateOfBirth.getYear()+1900));
             System.out.println("\tEmployeeID : " + employeeId);
             System.out.println("\tSectionName : " + sectionName);
             System.out.println("\tDesignation  : " + designation);
@@ -233,10 +459,10 @@ class Staff extends User {
 
     }
 
-    public void displayDetails(String userId, String employeeId, int birthYear) {
-        if (this.userId.equals(userId) && this.employeeId.equals(employeeId) && this.birthYear == birthYear) {
+    public void detailsforuserId(String userId) throws ParseException{
+        if (this.userId.equals(userId)) {
             System.out.println("--------------------------------------------------------------");
-            super.showDetails(birthYear);
+            super.showDetails((this.dateOfBirth.getYear()+1900));
             System.out.println("\tEmployeeID : " + employeeId);
             System.out.println("\tSectionName : " + sectionName);
             System.out.println("\tDesignation  : " + designation);
@@ -244,9 +470,16 @@ class Staff extends User {
 
         }
     }
+    public void detailsforemployeeId(String employeeId) throws ParseException{
+        if (this.employeeId.equals(employeeId)) {
+            System.out.println("--------------------------------------------------------------");
+            super.showDetails((this.dateOfBirth.getYear()+1900));
+            System.out.println("\tEmployeeID : " + employeeId);
+            System.out.println("\tSectionName : " + sectionName);
+            System.out.println("\tDesignation  : " + designation);
+            System.out.println("--------------------------------------------------------------");
 
-    public String getuserId() {
-        return this.userId;
+        }
     }
 
     public void checkDesignation(Staff s1, Staff s2) {
@@ -256,14 +489,13 @@ class Staff extends User {
             System.out.println("Different Designation!");
         }
     }
-
 }
 
 public class assn6 {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ParseException{
 
-        Scanner input = new Scanner(System.in);
+        Scanner input = new Scanner(System.in); 
 
         Student[] student = new Student[100];
         Faculty[] faculty = new Faculty[100];
@@ -289,6 +521,7 @@ public class assn6 {
                 System.out.println("\t\t2 - ShowDetails()");
                 System.out.println("\t\t3 - displayDetails()");
                 System.out.println("\t\t4 - compareDepartment()");
+                System.out.println("\t\t5 - backToHome()");
                 System.out.println("--------------------------------------------------------------");
 
                 System.out.print("Enter Your Choice : ");
@@ -298,15 +531,32 @@ public class assn6 {
                     System.out.print("Enter Name : ");
                     String name = input.nextLine();
 
-                    System.out.print("Enter Birth-Year : ");
-                    int birthYear = input.nextInt();
-                    input.nextLine();
+                    System.out.print("Enter DateOfBirth (dd/MM/yyyy) : ");
+                    String date = input.nextLine();
+                    SimpleDateFormat formatter1 = new SimpleDateFormat("dd/MM/yyyy");
+                    Date dateOfBirth = formatter1.parse(date);
 
                     System.out.print("Enter User-Id : ");
                     String userId = input.nextLine();
+                    Boolean flag2=false;
 
+                    for (int j = 0; j < k; j++) {
+                        flag2=faculty[j].checkuserId(userId);
+                        if (flag2) {
+                            break;
+                        }
+                    }
+                    
                     System.out.print("Enter EmployeeId : ");
                     String employeeId = input.nextLine();
+                    Boolean flag1=false;
+
+                    for (int j = 0; j < k; j++) {
+                        flag1=faculty[j].checkemployeeId(employeeId);
+                        if (flag1) {
+                            break;
+                        }
+                    }
 
                     System.out.print("Enter DepartmentName : ");
                     String departmentName = input.nextLine();
@@ -314,13 +564,22 @@ public class assn6 {
                     System.out.print("Enter NoOfPublications : ");
                     int noOfPublications = input.nextInt();
                     input.nextLine();
-                    Faculty object = new Faculty(name, birthYear, userId, employeeId, departmentName, noOfPublications);
-                    faculty[k] = object;
-                    k++;
+                    if(!flag1 && !flag2){
+                        Faculty object = new Faculty(name, dateOfBirth, userId, employeeId, departmentName, noOfPublications);
+                        faculty[k] = object;
+                        k++;
+                    }
+                    else if(flag1){
+                        System.out.println("Employee-Id already exist!");
+                    }
+                    else if(flag2){
+                        System.out.println("User-Id already exist!");
+
+                    }
                 } else if (choice1 == 1) {
                     Faculty object = new Faculty();
                     faculty[k] = object;
-                    faculty[k].setDetails();
+                    faculty[k].setDetails(faculty);
                     k++;
                 } else if (choice1 == 2) {
                     System.out.print("Enter the Birth-Year to get the details : ");
@@ -332,13 +591,36 @@ public class assn6 {
                     }
 
                 } else if (choice1 == 3) {
-                    System.out.println("Enter User-Id,Employee-Id,Birth-Year to display the detials");
-                    String userId = input.nextLine();
-                    String employeeId = input.nextLine();
-                    int birthYear = input.nextInt();
+                    
+                    System.out.println("--------------------------------------------------------------");
+                    System.out.println("\t\t1 - Based on User-Id");
+                    System.out.println("\t\t2 - Based on Employee-Id");
+                    System.out.println("\t\t3 - Based on Birth-Year");
+                    System.out.println("\t\t4 - backToHome()");
+                    System.out.println("--------------------------------------------------------------");
+                    System.out.print("Enter Your Choice : ");
+                    int choice2=input.nextInt();
                     input.nextLine();
-                    for (int j = 0; j < k; j++) {
-                        faculty[j].displayDetails(userId, employeeId, birthYear);
+
+                    if(choice2==1){
+                        System.out.print("Enter User-Id : ");
+                        String userId = input.nextLine();
+                        for (int j = 0; j < k; j++) {
+                            faculty[j].detailsforuserId(userId);
+                        }
+                    }else if(choice2==2){
+                        System.out.print("Enter Employee-Id : ");
+                        String employeeId = input.nextLine();
+                        for (int j = 0; j < k; j++) {
+                            faculty[j].detailsforemployeeId(employeeId);
+                        }
+                    }else if(choice2==3){
+                        System.out.print("Enter Birth-Year : ");
+                        int dateOfBirth = input.nextInt();
+                        input.nextLine();
+                        for (int j = 0; j < k; j++) {
+                            faculty[j].showDetails(dateOfBirth);
+                        }
                     }
                 } else if (choice1 == 4) {
                     System.out.print("Enter User-Id of User 1 : ");
@@ -369,9 +651,7 @@ public class assn6 {
                         f1.checkDepartment(f1, f2);
                     }
 
-                } else {
-                    System.out.println("Invalid Choice!");
-                }
+                } 
 
             } else if (choice == 2) {
                 System.out.println("--------------------------------------------------------------");
@@ -379,6 +659,7 @@ public class assn6 {
                 System.out.println("\t\t1 - setDetails()");
                 System.out.println("\t\t2 - showDetails()");
                 System.out.println("\t\t3 - displayDetails()");
+                System.out.println("\t\t5 - backToHome()");
                 System.out.println("--------------------------------------------------------------");
 
                 System.out.print("Enter Your Choice : ");
@@ -389,16 +670,31 @@ public class assn6 {
                     System.out.print("Enter Name : ");
                     String name = input.nextLine();
 
-                    System.out.print("Enter Birth-Year : ");
-                    int birthYear = input.nextInt();
-                    input.nextLine();
+                    System.out.print("Enter DateOfBirth (dd/MM/yyyy) : ");
+                    String date = input.nextLine();
+                    SimpleDateFormat formatter1 = new SimpleDateFormat("dd/MM/yyyy");
+                    Date dateOfBirth = formatter1.parse(date);
 
                     System.out.print("Enter User-Id : ");
                     String userId = input.nextLine();
+                    Boolean flag2=false;
+                    for (int j = 0; j < i; j++) {
+                        flag2=student[j].checkuserId(userId);
+                        if (flag2) {
+                            break;
+                        }
+                    }
 
                     System.out.print("Enter Roll-No : ");
                     int rollno = input.nextInt();
                     input.nextLine();
+                    Boolean flag1=false;
+                    for (int j = 0; j < i; j++) {
+                        flag1=student[j].checkrollno(rollno);
+                        if (flag1) {
+                            break;
+                        }
+                    }
 
                     System.out.print("Enter Semester : ");
                     int semester = input.nextInt();
@@ -407,13 +703,22 @@ public class assn6 {
                     System.out.print("Enter CPI : ");
                     float cpi = input.nextFloat();
                     input.nextLine();
-                    Student object = new Student(name, birthYear, userId, rollno, semester, cpi);
-                    student[i] = object;
-                    i++;
+                    
+                    if(!flag1 && !flag2){
+                        Student object = new Student(name, dateOfBirth, userId, rollno, semester, cpi);
+                        student[i] = object;
+                        i++;
+                    }
+                    else if(flag1){
+                        System.out.println("Roll-No already exist!");
+                    }
+                    else if(flag2){
+                        System.out.println("User-Id already exist!");
+                    }
                 } else if (choice1 == 1) {
                     Student object = new Student();
                     student[i] = object;
-                    student[i].setDetails();
+                    student[i].setDetails(student);
 
                     i++;
                 } else if (choice1 == 2) {
@@ -424,17 +729,39 @@ public class assn6 {
                     }
 
                 } else if (choice1 == 3) {
-                    System.out.println("Enter User-Id,Roll-No,Birth-Year to display the detials");
-                    String userId = input.nextLine();
-                    int rollno = input.nextInt();
-                    int birthYear = input.nextInt();
+                    System.out.println("--------------------------------------------------------------");
+                    System.out.println("\t\t1 - Based on User-Id");
+                    System.out.println("\t\t2 - Based on Roll-No");
+                    System.out.println("\t\t3 - Based on Birth-Year");
+                    System.out.println("\t\t4 - backToHome()");
+                    System.out.println("--------------------------------------------------------------");
+                    System.out.print("Enter Your Choice : ");
+                    int choice2=input.nextInt();
                     input.nextLine();
-                    for (int j = 0; j < i; j++) {
-                        student[j].displayDetails(userId, rollno, birthYear);
+
+                    if(choice2==1){
+                        System.out.print("Ener User-Id : ");
+                        String userId = input.nextLine();
+                        for (int j = 0; j < i; j++) {
+                            student[j].detailsforuserId(userId);
+                        }
+                    }else if(choice2==2){
+                        System.out.print("Enter Roll-No : ");
+                        int rollno = input.nextInt();
+                        input.nextLine();
+                        for (int j = 0; j < i; j++) {
+                            student[j].detailsforRollno(rollno);
+                        }
+                    }else if(choice2==3){
+                        System.out.print("Enter Birth-Year : ");
+                        int dateOfBirth = input.nextInt();
+                        input.nextLine();
+
+                        for (int j = 0; j < i; j++) {
+                            student[j].showDetails(dateOfBirth);
+                        }
                     }
-                } else {
-                    System.out.println("Invalid Choice!");
-                }
+                } 
 
             } else if (choice == 3) {
                 System.out.println("--------------------------------------------------------------");
@@ -443,6 +770,7 @@ public class assn6 {
                 System.out.println("\t\t2 - ShowDetails()");
                 System.out.println("\t\t3 - displayDetails()");
                 System.out.println("\t\t4 - compareDesignation()");
+                System.out.println("\t\t5 - backToHome()");
                 System.out.println("--------------------------------------------------------------");
 
                 System.out.print("Enter Your Choice : ");
@@ -452,15 +780,31 @@ public class assn6 {
                     System.out.print("Enter Name : ");
                     String name = input.nextLine();
 
-                    System.out.print("Enter Birth-Year : ");
-                    int birthYear = input.nextInt();
-                    input.nextLine();
+                    System.out.print("Enter DateOfBirth (dd/MM/yyyy) : ");
+                    String date = input.nextLine();
+                    SimpleDateFormat formatter1 = new SimpleDateFormat("dd/MM/yyyy");
+                    Date dateOfBirth = formatter1.parse(date);
 
                     System.out.print("Enter User-Id : ");
                     String userId = input.nextLine();
-
-                    System.out.print("Enter Employee-Id : ");
+                    Boolean flag2=false;
+                    for (int j = 0; j < l; j++) {
+                        flag2=staff[j].checkuserId(userId);
+                        if (flag2) {
+                            break;
+                        }
+                    }
+                    
+                    System.out.print("Enter EmployeeId : ");
                     String employeeId = input.nextLine();
+                    Boolean flag1=false;
+
+                    for (int j = 0; j < l; j++) {
+                        flag1=staff[j].checkemployeeId(employeeId);
+                        if (flag1) {
+                            break;
+                        }
+                    }
 
                     System.out.print("Enter SectionName : ");
                     String sectionName = input.nextLine();
@@ -468,14 +812,23 @@ public class assn6 {
                     System.out.print("Enter Designation : ");
                     String designation = input.nextLine();
 
-                    Staff object = new Staff(name, birthYear, userId, employeeId, sectionName, designation);
-                    staff[l] = object;
-                    l++;
+                    if(!flag1 && !flag2){
+                        Staff object = new Staff(name, dateOfBirth, userId, employeeId, sectionName, designation);
+                        staff[l] = object;
+                        l++;
+                    }
+                    else if(flag1){
+                        System.out.println("Employee-Id already exist!");
+                    }
+                    else if(flag2){
+                        System.out.println("User-Id already exist!");
+
+                    }
                 } else if (choice1 == 1) {
                     Staff object = new Staff();
 
                     staff[l] = object;
-                    staff[l].setDetails();
+                    staff[l].setDetails(staff);
                     l++;
                 } else if (choice1 == 2) {
                     System.out.print("Enter the Birth-Year to get the details : ");
@@ -485,14 +838,36 @@ public class assn6 {
                         staff[j].showDetails(year);
                     }
                 } else if (choice1 == 3) {
-                    System.out.println("Enter User-Id,Employee-Id,Birth-Year to display the detials");
-                    String userId = input.nextLine();
-                    String employeeId = input.nextLine();
-                    int birthYear = input.nextInt();
+                    System.out.println("--------------------------------------------------------------");
+                    System.out.println("\t\t1 - Based on User-Id");
+                    System.out.println("\t\t2 - Based on Employee-Id");
+                    System.out.println("\t\t3 - Based on Birth-Year");
+                    System.out.println("\t\t4 - backToHome()");
+                    System.out.println("--------------------------------------------------------------");
+                    System.out.print("Enter Your Choice : ");
+                    int choice2=input.nextInt();
                     input.nextLine();
-                    for (int j = 0; j < l; j++) {
-                        staff[j].displayDetails(userId, employeeId, birthYear);
+                    if(choice2==1){
+                        System.out.print("Enter User-ID : ");
+                        String userId = input.nextLine();
+                        for (int j = 0; j < l; j++) {
+                            staff[j].detailsforuserId(userId);
+                        }
+                    }else if(choice2==2){
+                        System.out.print("Enter Employee-Id : ");
+                        String employeeId = input.nextLine();
+                        for (int j = 0; j < l; j++) {
+                            staff[j].detailsforemployeeId(employeeId);
+                        }
+                    }else if(choice2==3){
+                        System.out.print("Enter Birth-Year : ");
+                        int dateOfBirth = input.nextInt();
+                        input.nextLine();
+                        for (int j = 0; j < l; j++) {
+                            staff[j].showDetails(dateOfBirth);
+                        }
                     }
+                    
                 } else if (choice1 == 4) {
                     System.out.print("Enter UserId of user 1 : ");
                     String id1 = input.nextLine();
@@ -523,9 +898,6 @@ public class assn6 {
 
                 }
 
-                else {
-                    System.out.println("Invalid Choice!");
-                }
             }
 
             else if (choice == 4) {
