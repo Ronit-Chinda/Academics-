@@ -64,6 +64,7 @@ int main()
         cout << "(" << v[i].first << "," << v[i].second << ")"
              << " : " << v1[i] << endl;
     }
+
     for (int i = 0; i < n - 1; i++)
     {
         v2.push_back(v[i]);
@@ -72,7 +73,7 @@ int main()
         {
             j++;
         }
-        i = j - 1;
+        i = j-1;
     }
 
     cout << "Maximum Job's that can be scheduled : " << endl;

@@ -40,15 +40,15 @@ int main()
             ans.push_back(v[i - 1]);
             capacity = v[i - 1] + temp;
         }
-        cout << " capacity : " << capacity << endl;
     }
 
     if (flag)
     {
-        cout << "Refilling positions are : " << endl;
+        cout << "------------------------------------------------" << endl;
+        cout << "\tRefilling positions are : " << endl;
         for (int i = 0; i < ans.size(); i++)
         {
-            cout << "Petrol Pump at distance : " << ans[i] << endl;
+            cout << "\tPetrol Pump at distance : " << ans[i] << endl;
         }
     }
 }
